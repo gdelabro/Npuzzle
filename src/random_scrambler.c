@@ -10,7 +10,7 @@ int		is_inverted(npuzzle *n, int a, int b)
 	i = -1;
 	while (++i < n->c)
 	{
-		nb = n->solved[i / n->t][i % n->t];
+		nb = n->solved[i];
 		if (nb == a || nb == b)
 			return (nb == b ? 1 : 0);
 	}
@@ -20,20 +20,17 @@ int		is_inverted(npuzzle *n, int a, int b)
 int		check_if_solvable(npuzzle *n)
 {
 	int inversions;
-	int puzz[n->c];
 	int i, j;
 	int row1, row2;
 
-	i = -1;
 	inversions = 0;
-	while (++i != n->c)
-		puzz[i] = n->puzzle[i / n->t][i % n->t];
+
 	i = -1;
 	while (++i != n->c)
 	{
 		j = i;
 		while (++j < n->c)
-			if (is_inverted(n, puzz[i], puzz[j]))
+			if (is_inverted(n, n->puzzle[i], n->puzzle[j]))
 				inversions++;
 	}
 	if (n->t % 2 == 1)
@@ -41,9 +38,9 @@ int		check_if_solvable(npuzzle *n)
 	i = -1;
 	while (++i < n->c)
 	{
-		if (!n->solved[i / n->t][i % n->t])
+		if (!n->solved[i])
 			row1 = i / n->t;
-		if (!puzz[i])
+		if (!n->puzzle[i])
 			row2 = i / n->t;
 	}
 	return ((inversions + row1 - row2) % 2);
@@ -51,23 +48,19 @@ int		check_if_solvable(npuzzle *n)
 
 void	invert_for_solvable(npuzzle *n)
 {
-	int puzz[n->c];
 	int i, j;
 	int tmp;
 
 	i = -1;
 	while (++i != n->c)
-		puzz[i] = n->puzzle[i / n->t][i % n->t];
-	i = -1;
-	while (++i != n->c)
 	{
 		j = i;
 		while (++j < n->c)
-			if (puzz[i] && puzz[j])
+			if (n->puzzle[i] && n->puzzle[j])
 			{
-				tmp = n->puzzle[i / n->t][i % n->t];
-				n->puzzle[i / n->t][i % n->t] = n->puzzle[j / n->t][j % n->t];
-				n->puzzle[j / n->t][j % n->t] = tmp;
+				tmp = n->puzzle[i];
+				n->puzzle[i] = n->puzzle[j];
+				n->puzzle[j] = tmp;
 				return ;
 			}
 	}
@@ -90,9 +83,9 @@ void	random_scrambler(npuzzle *n)
 		yi = i / n->t;
 		xj = j % n->t;
 		yj = j / n->t;
-		tmp = n->puzzle[xi][yi];
-		n->puzzle[xi][yi] = n->puzzle[xj][yj];
-		n->puzzle[xj][yj] = tmp;
+		tmp = n->puzzle[xi * n->t + yi];
+		n->puzzle[xi * n->t + yi] = n->puzzle[xj * n->t + yj];
+		n->puzzle[xj * n->t + yj] = tmp;
 		--i;
 	}
 	if (check_if_solvable(n))

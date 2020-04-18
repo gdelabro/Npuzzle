@@ -4,7 +4,6 @@ void	aff_struct(state_list *list)
 {
 	while (list)
 	{
-		//ft_printf("%d %d\n%d %d\n\n", list->puzzle[0][0], list->puzzle[0][1], list->puzzle[1][0], list->puzzle[1][1]);
 		ft_printf("{f: %d}%s", list->f, list->next ? " -> " : "\n");
 		list = list->next;
 	}
@@ -18,7 +17,6 @@ void	sort_by_f(t_a_star *a)
 
 	s = a->open;
 	old = NULL;
-	//aff_struct(a->open);
 	while (s && s->next)
 	{
 		if (s->f > ((state_list*)s->next)->f)
@@ -37,7 +35,6 @@ void	sort_by_f(t_a_star *a)
 			s->next = tmp;
 			s = a->open;
 			old = NULL;
-			//aff_struct(a->open);
 		}
 		else
 		{
@@ -58,7 +55,7 @@ int		state_is_in_closed(npuzzle *n, t_a_star *a, state_list *node)
 		i = -1;
 		while (++i < n->c)
 		{
-			if (node->puzzle[i / n->t][i % n->t] != closed->puzzle[i / n->t][i % n->t])
+			if (node->puzzle[i] != closed->puzzle[i])
 				break ;
 		}
 		if (i == n->c)
@@ -119,18 +116,8 @@ void	retrace_move_to_solve(state_list *node)
 
 void	end_function(npuzzle *n, state_list *node)
 {
-	int i, j;
 	ft_printf("g = %d\n", node->g);
-	i = -1;
-	while (++i < n->t)
-	{
-		j = -1;
-		while (++j < n->t)
-		{
-			ft_printf("%d ", node->puzzle[i][j]);
-		}
-		ft_printf("\n");
-	}
+	view_puzzle(n, node->puzzle);
 	ft_printf("move to solve:\n");
 	retrace_move_to_solve(node);
 	quit("its a win\n");

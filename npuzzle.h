@@ -19,14 +19,14 @@ typedef struct		s_puzzle
 	int		random;
 	int		t;
 	int		c;
-	int		**solved;
-	int		**puzzle;
+	int		*solved;
+	int		*puzzle;
 }					npuzzle;
 
 typedef struct		s_state_list
 {
 	void	*parent;
-	int		**puzzle;
+	int		*puzzle;
 	int		f;
 	int		g;
 	int		h;
@@ -42,15 +42,15 @@ typedef struct		s_Astar
 	state_list	*closed;
 }					t_a_star;
 
-void	view_puzzle(npuzzle *n);
+void	view_puzzle(npuzzle *n, int *puzzle);
 void	init(npuzzle *n);
 void	quit(char *str);
 
-int		move_up(npuzzle *n, int **puzzle);
-int		move_right(npuzzle *n, int **puzzle);
-int		move_down(npuzzle *n, int **puzzle);
-int		move_left(npuzzle *n, int **puzzle);
-int		move_possible(npuzzle *n, int **puzzle);
+int		move_up(npuzzle *n, int *puzzle);
+int		move_right(npuzzle *n, int *puzzle);
+int		move_down(npuzzle *n, int *puzzle);
+int		move_left(npuzzle *n, int *puzzle);
+int		move_possible(npuzzle *n, int *puzzle);
 
 void	random_scrambler(npuzzle *n);
 int		check_if_solvable(npuzzle *n);
@@ -60,10 +60,10 @@ void	check_numbers(npuzzle *n);
 
 void	a_star(npuzzle *n);
 
-int		manhattan(npuzzle *n, int **puzzle);
+int		manhattan(npuzzle *n, int *puzzle);
 
 state_list	*add_state_to_list(state_list *open, state_list *to_add);
-state_list	*creat_state_list(npuzzle *n, int **puzzle, state_list *parent);
+state_list	*creat_state_list(npuzzle *n, int *puzzle, state_list *parent);
 state_list	*creat_state_child(npuzzle *n, state_list *node);
 void		calc_fgh(npuzzle *n, state_list *node);
 

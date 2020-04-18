@@ -3,16 +3,12 @@
 void	check_numbers(npuzzle *n)
 {
 	int i, j;
-	int puzz[n->c];
 
-	i = -1;
-	while (++i != n->c)
-		puzz[i] = n->puzzle[i / n->t][i % n->t];
 	j = -1;
 	while (++j < n->c && (i = -1))
 	{
 		while (++i < n->c)
-			if (puzz[i] == j)
+			if (n->puzzle[i] == j)
 				break ;
 		if (i == n->c)
 			quit("bad number in puzzle\n");
@@ -35,18 +31,16 @@ int		parsing_puzzle(npuzzle *n, char *line, int mode)
 	int i;
 	int j;
 
-	if (!n->puzzle)
-		if (!(n->puzzle = malloc(sizeof(int*) * n->t)))
+	if (!n->puzzle && !(n->puzzle = malloc(sizeof(int*) * n->c)))
 			quit("malloc failed\n");
+
 	if (!check_valid_line(line) || ft_nbmot(line, ' ') != n->t)
 		quit("bad puzzle format\n");
-	if (!(n->puzzle[mode] = malloc(sizeof(int) * n->t)))
-		quit("malloc failed\n");
 	i = -1;
 	j = -1;
 	while (line[++i])
 		if (line[i] != ' ' && (!i || line[i - 1] == ' '))
-			n->puzzle[mode][++j] = ft_atoi(line + i);
+			n->puzzle[mode * n->t + ++j] = ft_atoi(line + i);
 	return (mode + 1);
 }
 
@@ -62,6 +56,7 @@ int		parsing_size(npuzzle *n, char *line)
 	while (line[++i] == ' ')
 		;
 	n->t = ft_atoi(line + i);
+	n->c = n->t * n->t;
 	return (0);
 }
 
@@ -94,7 +89,6 @@ void	parsing_file(npuzzle *n, char *file_name)
 			quit("bad size of puzzle\n");
 		ft_strdel(&line);
 	}
-	n->c = n->t * n->t;
 }
 
 void	parser(npuzzle *n, char *str)

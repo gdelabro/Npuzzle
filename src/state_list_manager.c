@@ -7,22 +7,16 @@ void		calc_fgh(npuzzle *n, state_list *node)
 	node->f = node->g + node->h;
 }
 
-state_list	*creat_state_list(npuzzle *n, int **puzzle, state_list *parent)
+state_list	*creat_state_list(npuzzle *n, int *puzzle, state_list *parent)
 {
 	state_list *s;
 	int i, j;
 
-	if (!(s = malloc(sizeof(state_list))) || !(s->puzzle = malloc(sizeof(int*) * n->t)))
+	if (!(s = malloc(sizeof(state_list))) || !(s->puzzle = malloc(sizeof(int*) * n->c)))
 		quit("malloc failed\n");
 	i = -1;
-	while (++i < n->t)
-	{
-		if (!(s->puzzle[i] = malloc(sizeof(int) * n->t)))
-			quit("malloc failed\n");
-		j = -1;
-		while (++j < n->t)
-			s->puzzle[i][j] = puzzle[i][j];
-	}
+	while (++i < n->c)
+		s->puzzle[i] = puzzle[i];
 	s->parent = parent;
 	s->child = NULL;
 	s->next = NULL;
