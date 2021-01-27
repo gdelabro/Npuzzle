@@ -1,0 +1,6 @@
+"""
+    docstring
+"""
+
+DURATIONS = {}
+ASTAR = None
